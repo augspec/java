@@ -1,0 +1,86 @@
+package com.bkav.bkavcoreca.xml;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilder;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.bkav.bkavcoreca.pdf.BankReceipt;
+import com.bkav.bkavcoreca.utils.Base64;
+
+
+
+public class BankTransactionXML {
+
+	
+	@SuppressWarnings("deprecation")
+	public static BankReceipt getBankReceipt(String base64) throws ParserConfigurationException, 
+	SAXException, IOException {
+		BankReceipt bankReceipt = new BankReceipt();
+		
+		if (base64.isEmpty()) {
+			return bankReceipt;
+		}
+		
+		System.out.println(base64);
+		base64 = base64.replaceAll("^77u/", "");
+		
+		String xml = new String(Base64.decode(base64.getBytes()), "UTF-8");
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		xml = xml.replaceAll("(\r\n|\n)", "");
+		StringReader stringReader = new StringReader(xml);
+		Document document = dBuilder.parse(new InputSource(stringReader));
+		
+		bankReceipt.setAccountNumberOriginal(
+				document.getElementsByTagName("accountNumberOriginal").item(0).getTextContent());
+		bankReceipt.setAccountNumberBeneficiary(
+				document.getElementsByTagName("accountBeneficiary").item(0).getTextContent());
+		bankReceipt.setNameBeneficiary(
+				document.getElementsByTagName("nameBeneficiary").item(0).getTextContent());
+		bankReceipt.setNameBankBeneficiary(
+				document.getElementsByTagName("bankBeneficiary").item(0).getTextContent());
+		bankReceipt.setNameBranchBankBeneficiary(
+				document.getElementsByTagName("branchBankBeneficiary").item(0).getTextContent());
+		bankReceipt.setCostBearer(
+				document.getElementsByTagName("costBearer").item(0).getTextContent());
+		bankReceipt.setNumberMoney(
+				document.getElementsByTagName("numberBoney").item(0).getTextContent());
+		bankReceipt.setDateTransaction(
+				new Date(document.getElementsByTagName("dateTransaction").item(0).getTextContent()));
+		bankReceipt.setCodeOTP(
+				document.getElementsByTagName("codeOTP").item(0).getTextContent());
+		bankReceipt.setDescription(
+				document.getElementsByTagName("description").item(0).getTextContent());
+		
+		return bankReceipt;
+	}
+	
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+		
+//		String xml = "";
+//		File fXmlFile = new File("/home/thangntc/Desktop/createPDF/a.xml");
+//		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//		Document document = dBuilder.parse(fXmlFile);
+//		
+//		System.out.println(document.getElementsByTagName("tranType").item(0).getTextContent());
+//		System.out.println(document.getElementsByTagName("ds:Signature").item(0).getTextContent());
+		
+/*		NodeList nList = doc.getElementsByTagName("tranType");
+		NodeList nList1 = doc.getElementsByTagName("ds:Signature");*/
+		
+		String a = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGJhbmtUcmFuc2FjdGlvbj48YWNjb3VudE51bWJlck9yaWdpbmFsPjI3OTQxNTYxMjQxNDU1MjU8L2FjY291bnROdW1iZXJPcmlnaW5hbD48YWNjb3VudEJlbmVmaWNpYXJ5PjcxMUdCNDIzR0dHUzMzNDI8L2FjY291bnRCZW5lZmljaWFyeT48bmFtZUJlbmVmaWNpYXJ5Pk5ndXllbiBWYW4gVGh1PC9uYW1lQmVuZWZpY2lhcnk+PGJhbmtCZW5lZmljaWFyeT5OSCBCSyBCQU5LPC9iYW5rQmVuZWZpY2lhcnk+PGJyYW5jaEJhbmtCZW5lZmljaWFyeT5IYU5vaTwvYnJhbmNoQmFua0JlbmVmaWNpYXJ5Pjxjb3N0QmVhcmVyPk5nxrDhu51pIGNodXnhu4NuIGNo4buLdSBwaMOtPC9jb3N0QmVhcmVyPjxudW1iZXJCb25leT4xLDAwMCwwMDBWTkQ8L251bWJlckJvbmV5PjxkYXRlVHJhbnNhY3Rpb24+U2F0IEphbiAyOCAyMDE3IDEyOjI2OjU2IEdNVCswNzAwIChTRSBBc2lhIFN0YW5kYXJkIFRpbWUpPC9kYXRlVHJhbnNhY3Rpb24+PGNvZGVPVFA+MTU2ODQzPC9jb2RlT1RQPjxkZXNjcmlwdGlvbj50aWVuIG11YSBuaGE8L2Rlc2NyaXB0aW9uPjxkczpTaWduYXR1cmUgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiPjxkczpTaWduZWRJbmZvPjxkczpDYW5vbmljYWxpemF0aW9uTWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvVFIvMjAwMS9SRUMteG1sLWMxNG4tMjAwMTAzMTUjV2l0aENvbW1lbnRzIj48L2RzOkNhbm9uaWNhbGl6YXRpb25NZXRob2Q+PGRzOlNpZ25hdHVyZU1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNyc2Etc2hhMSI+PC9kczpTaWduYXR1cmVNZXRob2Q+PGRzOlJlZmVyZW5jZSBVUkk9IiI+PGRzOlRyYW5zZm9ybXM+PGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNlbnZlbG9wZWQtc2lnbmF0dXJlIj48L2RzOlRyYW5zZm9ybT48L2RzOlRyYW5zZm9ybXM+PGRzOkRpZ2VzdE1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNzaGExIj48L2RzOkRpZ2VzdE1ldGhvZD48ZHM6RGlnZXN0VmFsdWU+akFwV25hcnhBL1RWV2NpVUhpSVp0cnZEcm9vPTwvZHM6RGlnZXN0VmFsdWU+PC9kczpSZWZlcmVuY2U+PC9kczpTaWduZWRJbmZvPjxkczpTaWduYXR1cmVWYWx1ZT5iVElRZHQxVk0rQkdCbnhwRFR6QUdlZm8yN1pVZml4c3JxZUQ3d3JFNXNWTXNkVStsZjVvZTB3RU9EOTBLUng0SmVmeTRVdzlqSUhyZ2F5NUpJdnNRNEp6c3lQeG13WHgzUjBzS3hUanM2OElOUGd3WjBVTTdNWTNHZnNGZFpKelMwQVAyU2NQbXBmK01iREZGMzNmdWpSU0dia3hjSDhpUXlYSVovLzdWSFE9PC9kczpTaWduYXR1cmVWYWx1ZT48ZHM6S2V5SW5mbz48ZHM6S2V5VmFsdWU+PGRzOlJTQUtleVZhbHVlPjxkczpNb2R1bHVzPmd0SmdGa1BvWCtGWVFUUVBqb3RTV1Y4a0tzMFY5dHgxMGQ0eWs4K3BYRDFkSGpQTHlRZkdJdGVsZXhUUXVQYXY3dlFrbmdKM1lPQWRiaDNCdWJ2WnNjeWdsTmdNcTZPeVdRQ0c3c2J0ZFhmQ1lwcXJrQ3IrazMrREtiYzRZblJvSnA4TWRQcnhYV29IaEE1T0MxUENjcUdvZy9zczdBZktqd2JQTlI1VXcwYz08L2RzOk1vZHVsdXM+PGRzOkV4cG9uZW50PkFRQUI8L2RzOkV4cG9uZW50PjwvZHM6UlNBS2V5VmFsdWU+PC9kczpLZXlWYWx1ZT48ZHM6WDUwOURhdGE+PGRzOlg1MDlJc3N1ZXJTZXJpYWw+PGRzOlg1MDlJc3N1ZXJOYW1lPkNOPUJrYXZDQSwgTz1Ca2F2IENvcnBvcmF0aW9uLCBMPUhhbm9pLCBDPVZOPC9kczpYNTA5SXNzdWVyTmFtZT48ZHM6WDUwOVNlcmlhbE51bWJlcj4xMTE2NzI5NDc3NzIyNjk0NjIwNjQ1MDAzNTQxNjE4NTU1MDMyODE8L2RzOlg1MDlTZXJpYWxOdW1iZXI+PC9kczpYNTA5SXNzdWVyU2VyaWFsPjxkczpYNTA5U3ViamVjdE5hbWU+Qz1WTiwgU1Q9SMOgIE7hu5lpLCBMPUPhuqd1IEdp4bqleSwgQ049QW5OViwgVUlEPUNNTkQ6MDEzNTg3MDM2PC9kczpYNTA5U3ViamVjdE5hbWU+PGRzOlg1MDlDZXJ0aWZpY2F0ZT5NSUlFQnpDQ0F1K2dBd0lCQWdJUVZBTnRhckY4SHZRV0MvNlB1Z2tic1RBTkJna3Foa2lHOXcwQkFRVUZBREJKTVFzd0NRWURWUVFHRXdKV1RqRU9NQXdHQTFVRUJ4TUZTR0Z1YjJreEdUQVhCZ05WQkFvVEVFSnJZWFlnUTI5eWNHOXlZWFJwYjI0eER6QU5CZ05WQkFNVEJrSnJZWFpEUVRBZUZ3MHhOakEzTVRrd09EVXpORGRhRncweE9UQTNNVGt3T0RVek5EZGFNR2N4SGpBY0Jnb0praWFKay9Jc1pBRUJEQTVEVFU1RU9qQXhNelU0TnpBek5qRU5NQXNHQTFVRUF3d0VRVzVPVmpFVk1CTUdBMVVFQnd3TVErRzZwM1VnUjJuaHVxVjVNUkl3RUFZRFZRUUlEQWxJdzZBZ1R1RzdtV2t4Q3pBSkJnTlZCQVlUQWxaT01JR2ZNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0R05BRENCaVFLQmdRQ0MwbUFXUStoZjRWaEJOQStPaTFKWlh5UXF6UlgyM0hYUjNqS1R6NmxjUFYwZU04dkpCOFlpMTZWN0ZOQzQ5cS91OUNTZUFuZGc0QjF1SGNHNXU5bXh6S0NVMkF5cm83SlpBSWJ1eHUxMWQ4SmltcXVRS3Y2VGY0TXB0emhpZEdnbW53eDArdkZkYWdlRURrNExVOEp5b2FpRCt5enNCOHFQQnM4MUhsVERSd0lEQVFBQm80SUJUekNDQVVzd01RWUlLd1lCQlFVSEFRRUVKVEFqTUNFR0NDc0dBUVVGQnpBQmhoVm9kSFJ3T2k4dmIyTnpjQzVpYTJGMlkyRXVkbTR3SFFZRFZSME9CQllFRlBoWE1mYk02eVlBOUtlamMwVTZCR1AyRXh1T01Bd0dBMVVkRXdFQi93UUNNQUF3SHdZRFZSMGpCQmd3Rm9BVUhyQVBTSmZmME1ObnAwYUVPMWc3aUExVGxJWXdmd1lEVlIwZkJIZ3dkakIwb0NPZ0lZWWZhSFIwY0RvdkwyTnliQzVpYTJGMlkyRXVkbTR2UW10aGRrTkJMbU55YktKTnBFc3dTVEVQTUEwR0ExVUVBd3dHUW10aGRrTkJNUmt3RndZRFZRUUtEQkJDYTJGMklFTnZjbkJ2Y21GMGFXOXVNUTR3REFZRFZRUUhEQVZJWVc1dmFURUxNQWtHQTFVRUJoTUNWazR3RGdZRFZSMFBBUUgvQkFRREFnV2dNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUZCUWNEQWpBWUJnTlZIUkVFRVRBUGdRMWhiblp1UUdKcllYWXVZMjl0TUEwR0NTcUdTSWIzRFFFQkJRVUFBNElCQVFCdWU2WGVxOEpXYzFxTHE1ZDhvdTRlMjRTLzdFeGJjVzk0ZFd0enY1YzlaNytQVWdyNUZsTTVOYnFPWnFzN0lXVkFyWmhoRzdHbWtRZEhxWEFSbmN6cS9aOVQ3b3NGQ3ZUenJkeWlVTjFBVXRTWnVic2ZNVjJpeWxQbWpyaGdGczRWeTEyeEFqbzRyN3NQVkJUTG1jU0dPZUQyQlAzMHlYSitudHgrdFNnNmJ1L3BzSkVpdzU3YWZQTGFyaDNrblNmMnJSbXl4TUxTOWRIakJiSjdpbjRmcldLVGF5YkhkVTBjQ2JTVWJuS08yVm5KSTV5NWp3b1FGZDd2T0VYV3JMMGlpMncrY0ZrQ0p4cUE3dXBRQUtsc25HS0xMZXZSeU52Y05nbGFjbzJPdXo1ckFOeGtiSVVUNzVXRlphOWRVZjdyaW5yM3kvMC9jYkdWTjdCZjkxN3g8L2RzOlg1MDlDZXJ0aWZpY2F0ZT48L2RzOlg1MDlEYXRhPjwvZHM6S2V5SW5mbz48L2RzOlNpZ25hdHVyZT48L2JhbmtUcmFuc2FjdGlvbj4=";
+		
+		System.out.println(getBankReceipt(a).getDateTransaction());
+		
+	}
+}

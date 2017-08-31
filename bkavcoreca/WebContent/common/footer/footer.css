@@ -1,0 +1,42 @@
+.footer {
+	width: 100%;
+	height: 60px;
+	color: #ffffff;
+}
+
+.footer ul li {
+	list-style: none;
+	font-family: Tahoma;
+	float: right;
+	display: block;
+	padding-bottom: 15px;
+}
+
+.footer ul li.iso {
+	padding: 5px;
+	margin-top: 22px;
+	margin-right: 10px;
+	border: 1px solid #ffffff;
+	font-size: 10px;
+	font-weight: bolder;
+	border-radius: 4px 0px 4px 0px;
+	margin-right: 10px;
+}
+
+.footer ul li.iso span {
+	font-size: 8px;
+}
+
+.footer ul li.name {
+	font-size: 10px;
+	margin-right: 20px;
+	margin-top: 20px;
+}
+
+.footer ul li.name span {
+	font-size: 10px;
+}
+
+.footer ul li.logo {
+	margin-top: 22px;
+}

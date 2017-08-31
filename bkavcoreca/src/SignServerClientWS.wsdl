@@ -1,0 +1,482 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="ClientWSService" targetNamespace="http://clientws.signserver.org/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://clientws.signserver.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://clientws.signserver.org/" xmlns:tns="http://clientws.signserver.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="decryptSessionKey" type="tns:decryptSessionKey"/>
+<xs:element name="decryptSessionKeyResponse" type="tns:decryptSessionKeyResponse"/>
+<xs:element name="getCMSOriginalData" type="tns:getCMSOriginalData"/>
+<xs:element name="getCMSOriginalDataResponse" type="tns:getCMSOriginalDataResponse"/>
+<xs:element name="getCertificateFromAD" type="tns:getCertificateFromAD"/>
+<xs:element name="getCertificateFromADResponse" type="tns:getCertificateFromADResponse"/>
+<xs:element name="getCertificateFromSignedData" type="tns:getCertificateFromSignedData"/>
+<xs:element name="getCertificateFromSignedDataResponse" type="tns:getCertificateFromSignedDataResponse"/>
+<xs:element name="processData" type="tns:processData"/>
+<xs:element name="processDataResponse" type="tns:processDataResponse"/>
+<xs:element name="processSOD" type="tns:processSOD"/>
+<xs:element name="processSODResponse" type="tns:processSODResponse"/>
+<xs:element name="sign" type="tns:sign"/>
+<xs:element name="signResponse" type="tns:signResponse"/>
+<xs:element name="verify" type="tns:verify"/>
+<xs:element name="verifyResponse" type="tns:verifyResponse"/>
+<xs:element name="verifySignature" type="tns:verifySignature"/>
+<xs:element name="verifySignatureResponse" type="tns:verifySignatureResponse"/>
+<xs:complexType name="decryptSessionKey">
+<xs:sequence>
+<xs:element minOccurs="0" name="workerNameOrID" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" type="tns:metadata"/>
+<xs:element minOccurs="0" name="data" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="metadata">
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute name="name" type="xs:string" use="required"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="decryptSessionKeyResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:dataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="dataResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="archiveId" type="xs:string"/>
+<xs:element minOccurs="0" name="data" type="xs:base64Binary"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="tns:metadata"/>
+<xs:element name="requestId" type="xs:int"/>
+<xs:element minOccurs="0" name="signerCertificate" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCertificateFromSignedData">
+<xs:sequence>
+<xs:element minOccurs="0" name="data" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCertificateFromSignedDataResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:dataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCMSOriginalData">
+<xs:sequence>
+<xs:element minOccurs="0" name="signedData" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCMSOriginalDataResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="processData">
+<xs:sequence>
+<xs:element minOccurs="0" name="worker" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" type="tns:metadata"/>
+<xs:element minOccurs="0" name="data" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="processDataResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:dataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="verify">
+<xs:sequence>
+<xs:element minOccurs="0" name="worker" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" type="tns:metadata"/>
+<xs:element minOccurs="0" name="data" type="xs:base64Binary"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="verifyResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:validationDataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="validationDataResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="certificateData" type="xs:base64Binary"/>
+<xs:element name="isValid" type="xs:boolean"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messages" nillable="true" type="xs:string"/>
+<xs:element name="requestId" type="xs:int"/>
+<xs:element name="validateCode" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="sign">
+<xs:sequence>
+<xs:element minOccurs="0" name="signdata" type="tns:signData"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="signData">
+<xs:sequence>
+<xs:element minOccurs="0" name="dataToSign" type="xs:base64Binary"/>
+<xs:element minOccurs="0" name="nodeContainSignature" type="xs:string"/>
+<xs:element minOccurs="0" name="nodeName" type="xs:string"/>
+<xs:element minOccurs="0" name="reference" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="requestMetadata" nillable="true" type="tns:metadata"/>
+<xs:element minOccurs="0" name="workerName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="signResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:dataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="processSOD">
+<xs:sequence>
+<xs:element minOccurs="0" name="worker" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" type="tns:metadata"/>
+<xs:element minOccurs="0" name="sodData" type="tns:sodRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="sodRequest">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" name="dataGroup" type="tns:dataGroup"/>
+<xs:element minOccurs="0" name="ldsVersion" type="xs:string"/>
+<xs:element minOccurs="0" name="unicodeVersion" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="dataGroup">
+<xs:simpleContent>
+<xs:extension base="xs:base64Binary">
+<xs:attribute name="id" type="xs:int" use="required"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="processSODResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:sodResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="sodResponse">
+<xs:complexContent>
+<xs:extension base="tns:dataResponse">
+<xs:sequence/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="getCertificateFromAD">
+<xs:sequence>
+<xs:element minOccurs="0" name="userName" type="xs:string"/>
+<xs:element minOccurs="0" name="password" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCertificateFromADResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:dataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="verifySignature">
+<xs:sequence>
+<xs:element minOccurs="0" name="verifydata" type="tns:verifyData"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="verifyData">
+<xs:sequence>
+<xs:element minOccurs="0" name="originalBytes" type="xs:base64Binary"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="requestMetadata" nillable="true" type="tns:metadata"/>
+<xs:element minOccurs="0" name="signedBytes" type="xs:base64Binary"/>
+<xs:element minOccurs="0" name="signerCert" type="xs:base64Binary"/>
+<xs:element name="signingTime" type="xs:long"/>
+<xs:element minOccurs="0" name="workerName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="verifySignatureResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:validationDataResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:element name="InternalServerException" type="tns:InternalServerException"/>
+<xs:complexType name="InternalServerException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="RequestFailedException" type="tns:RequestFailedException"/>
+<xs:complexType name="RequestFailedException">
+<xs:sequence/>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getCMSOriginalData">
+    <wsdl:part element="tns:getCMSOriginalData" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verify">
+    <wsdl:part element="tns:verify" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifySignature">
+    <wsdl:part element="tns:verifySignature" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InternalServerException">
+    <wsdl:part element="tns:InternalServerException" name="InternalServerException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyResponse">
+    <wsdl:part element="tns:verifyResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCMSOriginalDataResponse">
+    <wsdl:part element="tns:getCMSOriginalDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processDataResponse">
+    <wsdl:part element="tns:processDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCertificateFromSignedData">
+    <wsdl:part element="tns:getCertificateFromSignedData" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCertificateFromSignedDataResponse">
+    <wsdl:part element="tns:getCertificateFromSignedDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="signResponse">
+    <wsdl:part element="tns:signResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCertificateFromAD">
+    <wsdl:part element="tns:getCertificateFromAD" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifySignatureResponse">
+    <wsdl:part element="tns:verifySignatureResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sign">
+    <wsdl:part element="tns:sign" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCertificateFromADResponse">
+    <wsdl:part element="tns:getCertificateFromADResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processSOD">
+    <wsdl:part element="tns:processSOD" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="decryptSessionKey">
+    <wsdl:part element="tns:decryptSessionKey" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processData">
+    <wsdl:part element="tns:processData" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processSODResponse">
+    <wsdl:part element="tns:processSODResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="decryptSessionKeyResponse">
+    <wsdl:part element="tns:decryptSessionKeyResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RequestFailedException">
+    <wsdl:part element="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ClientWS">
+    <wsdl:operation name="decryptSessionKey">
+      <wsdl:input message="tns:decryptSessionKey" name="decryptSessionKey">
+    </wsdl:input>
+      <wsdl:output message="tns:decryptSessionKeyResponse" name="decryptSessionKeyResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCertificateFromSignedData">
+      <wsdl:input message="tns:getCertificateFromSignedData" name="getCertificateFromSignedData">
+    </wsdl:input>
+      <wsdl:output message="tns:getCertificateFromSignedDataResponse" name="getCertificateFromSignedDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCMSOriginalData">
+      <wsdl:input message="tns:getCMSOriginalData" name="getCMSOriginalData">
+    </wsdl:input>
+      <wsdl:output message="tns:getCMSOriginalDataResponse" name="getCMSOriginalDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="processData">
+      <wsdl:input message="tns:processData" name="processData">
+    </wsdl:input>
+      <wsdl:output message="tns:processDataResponse" name="processDataResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="verify">
+      <wsdl:input message="tns:verify" name="verify">
+    </wsdl:input>
+      <wsdl:output message="tns:verifyResponse" name="verifyResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="sign">
+      <wsdl:input message="tns:sign" name="sign">
+    </wsdl:input>
+      <wsdl:output message="tns:signResponse" name="signResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="processSOD">
+      <wsdl:input message="tns:processSOD" name="processSOD">
+    </wsdl:input>
+      <wsdl:output message="tns:processSODResponse" name="processSODResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCertificateFromAD">
+      <wsdl:input message="tns:getCertificateFromAD" name="getCertificateFromAD">
+    </wsdl:input>
+      <wsdl:output message="tns:getCertificateFromADResponse" name="getCertificateFromADResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifySignature">
+      <wsdl:input message="tns:verifySignature" name="verifySignature">
+    </wsdl:input>
+      <wsdl:output message="tns:verifySignatureResponse" name="verifySignatureResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InternalServerException" name="InternalServerException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:RequestFailedException" name="RequestFailedException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ClientWSServiceSoapBinding" type="tns:ClientWS">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="decryptSessionKey">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="decryptSessionKey">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="decryptSessionKeyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCertificateFromSignedData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCertificateFromSignedData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCertificateFromSignedDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCMSOriginalData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCMSOriginalData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCMSOriginalDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="processData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="processData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="processDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="verify">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="verify">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="verifyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="sign">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sign">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="signResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="processSOD">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="processSOD">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="processSODResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCertificateFromAD">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCertificateFromAD">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCertificateFromADResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifySignature">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="verifySignature">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="verifySignatureResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InternalServerException">
+        <soap:fault name="InternalServerException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequestFailedException">
+        <soap:fault name="RequestFailedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ClientWSService">
+    <wsdl:port binding="tns:ClientWSServiceSoapBinding" name="ClientWSPort">
+      <soap:address location="https://10.2.32.59/signserver/ClientWSService/ClientWS"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
