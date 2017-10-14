@@ -23,7 +23,4 @@ public class SHA2Util {
 		return sb.toString();
 	}
 	
-	public static void main(String[] args) throws NoSuchAlgorithmException {
-		System.out.println(SHA2Util.hash("123456"));
-	}
 }

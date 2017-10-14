@@ -38,16 +38,4 @@ public class UserDAO {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		UserDAO userDAO = new UserDAO();
-		
-		List<User> list = userDAO.getAll();
-
-		for (User user : list) {
-			System.out.println(user.getId());
-			System.out.println(user.getUsername());
-			System.out.println(user.getPassword());
-			System.out.println(user.getLastUpdate());
-		}
-	}
 }
