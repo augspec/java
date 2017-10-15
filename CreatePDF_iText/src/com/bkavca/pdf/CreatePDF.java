@@ -30,6 +30,19 @@ public class CreatePDF {
 	private static final String TAHOMA_BOLD_FONT_PATH = ROOT_FONTS_PATH + File.separator + "tahomaBold.ttf";
 	private static final String TAHOMA_FAUX_ITALIC_FONT_PATH = ROOT_FONTS_PATH + File.separator + "tahomaItalic.ttf";
 	private static final String BACKGROUND_IMAGE_PATH = ROOT_BACKGROUND_PATH + File.separator + "background.jpg";
+	
+	private class Label {
+		public static final String NUMBER = "Số: ";
+		public static final String COMMON_NAME = "Thuộc tổ chức, doanh nghiệp: ";
+		public static final String INFO = "Sử dụng chữ ký số với thông tin như sau: ";
+		public static final String SERIAL = "Serial Number";
+		public static final String SUBJECT_DN = "Subject DN";
+		public static final String ISSUER_DN = "Issuer DN";
+		public static final String PAIR_OF_KEYS_LENGTH = "Độ dài cặp khóa";
+		public static final String PROPERTIES = "Thuộc tính";
+		public static final String START_END_DATE = "Hạn dùng";
+		public static final String PUBLISH_DATE = "Hà nội, ngày ";
+	}
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
@@ -41,14 +54,14 @@ public class CreatePDF {
 			PdfFont tahomaBold = PdfFontFactory.createFont(TAHOMA_BOLD_FONT_PATH, PdfEncodings.IDENTITY_H);
 			//PdfFont tahomaItalic = PdfFontFactory.createFont(TAHOMA_FAUX_ITALIC_FONT_PATH, PdfEncodings.IDENTITY_H);
 
+			PageSize pageSize = new PageSize(PageSize.A4).clone();
+			
 	        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(FILE_PATH));
-	        Document doc = new Document(pdfDoc, PageSize.A4);
+	        Document doc = new Document(pdfDoc, pageSize);
 	        
-	        //Image
-	        Image img = new Image(ImageDataFactory.create(BACKGROUND_IMAGE_PATH));
-	        img.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-	        img.setFixedPosition(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-	        doc.add(img);
+	        PdfCanvas canvas = new PdfCanvas(pdfDoc.addNewPage());
+	        canvas.addImage(ImageDataFactory.create(BACKGROUND_IMAGE_PATH), pageSize, false);
+	        doc.add(new Paragraph());
 	        
 	        Paragraph p1 = new Paragraph("BIÊN LAI GIAO DỊCH");
 	        p1.setMargin(0);
