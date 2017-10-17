@@ -1,8 +1,12 @@
 package com.bkavca.pdf;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
+import com.itextpdf.io.codec.Base64;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
@@ -15,10 +19,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.renderer.DrawContext;
 import com.itextpdf.layout.renderer.ParagraphRenderer;
@@ -27,12 +28,39 @@ public class CreatePDF {
 	
 	private static final String FILE_PATH = "E:\\iText_PDF.pdf";
 	
+	/**
+	 * Đường dẫn gốc package chứa các file font chữ (TTF file)
+	 */
 	private static final String ROOT_FONTS_PATH = System.getProperty("user.dir") +  File.separator + "src" + File.separator + "fonts";
+	
+	/**
+	 * Đường dẫn gốc package chứ file ảnh nền
+	 */
 	private static final String ROOT_BACKGROUND_PATH = System.getProperty("user.dir") +  File.separator + "src" + File.separator + "background";
+	
+	/**
+	 * Đường dẫn font chữ Times New Roman Regular
+	 */
 	private static final String TIMES_REGULAR_FONT_PATH = ROOT_FONTS_PATH + File.separator + "timesNewRomanRegular.ttf";
+	
+	/**
+	 * Đường dẫn font chữ Times New Roman Bold
+	 */
 	private static final String TIMES_BOLD_FONT_PATH = ROOT_FONTS_PATH + File.separator + "timesNewRomanBold.ttf";
+	
+	/**
+	 * Đường dẫn font chữ Tahoma Regular
+	 */
 	private static final String TAHOMA_REGULAR_FONT_PATH = ROOT_FONTS_PATH + File.separator + "tahomaRegular.ttf";
+	
+	/**
+	 * Đường dẫn font chữ Tahoma Bold
+	 */
 	private static final String TAHOMA_BOLD_FONT_PATH = ROOT_FONTS_PATH + File.separator + "tahomaBold.ttf";
+	
+	/**
+	 * Đường dẫn ảnh nền
+	 */
 	private static final String BACKGROUND_IMAGE_PATH = ROOT_BACKGROUND_PATH + File.separator + "background.jpg";
 	
 	/**
@@ -56,10 +84,17 @@ public class CreatePDF {
 	private static final int LABEL_FONT_SIZE = 12;
 	
 	/**
-	 * Góc bo tròn của hình chữ nhật
+	 * Góc bo tròn của hình chữ nhật (độ cong 4 góc của hình chữ nhật)
 	 */
 	private static final int ROUNDED_CORNERS = 5;
 	
+	/**
+	 * Class chứa tất cả các nhãn sẽ chèn vào file PDF, 
+	 * khai báo trong 1 class để dễ dàng chỉnh sửa
+	 * 
+	 * @author HungDMc
+	 *
+	 */
 	private class Label {
 		public static final String NUMBER = "Số: ";
 		public static final String COMMON_NAME = "Thuộc tổ chức, doanh nghiệp: ";
@@ -73,7 +108,13 @@ public class CreatePDF {
 		public static final String PUBLISH_DATE = "Hà nội, ngày ";
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * Ví dụ tạo file.
+	 * 
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main(String[] args) throws IOException {
 		
 		Data data = new Data();
 		data.setNumberId(1789);
@@ -101,13 +142,50 @@ public class CreatePDF {
 		data.setStartEndDate(new Date(), new Date());
 		data.setPublishDate(new Date());
 		
-		boolean created = createPDF(FILE_PATH, data);
-		System.out.println("Create file " + (created ? "done" : "failed!"));
+		String base64 = createPDF(data);
+		byte[] dataToWrite = Base64.decode(base64);
+		File file = new File(FILE_PATH);
+		if (!file.exists())
+			file.createNewFile();
+		FileOutputStream fos = new FileOutputStream(file);
+		
+		fos.write(dataToWrite);
+		fos.flush();
+		fos.close();
+		
+		System.out.println("Create file " + (base64 != null ? "done" : "failed!"));
 	}
 	
+	/**
+	 * Tạo file PDF: tạo ra chuỗi base64 encode bởi <b>com.itextpdf.io.codec.Base64</b>, 
+	 * khi ghi ra file cần decode lại ra mảng bytes (byte[]) và ghi thành file PDF.<br/>
+	 * Ví dụ decode chuỗi base64 để ghi ra file PDF:<br/>
+	 * 
+	 * <pre>
+	 * {@code 
+	 * String base64Pdf = createPDF(data);
+	 * byte[] dataToWrite = com.itextpdf.io.codec.Base64.decode(base64Pdf);
+	 * File pdfFile = new File("path_of_pdf_file");
+	 * FileOutputStream fos = new FileOutputStream(pdfFile);
+	 * 
+	 * if (!pdfFile.exists())
+	 *     pdfFile.createNewFile();
+	 *     
+	 * fos.write(dataToWrite);
+	 * fos.flush();
+	 * fos.close();
+	 * }
+	 * </pre>
+	 * @param data dữ liệu sẽ được chèn vào file PDF
+	 * @return Chuỗi base64 encode bởi <b>com.itextpdf.io.codec.Base64</b> nếu tạo và ghi ra file thành công, ngược lại trả về <b>null</b>
+	 * @author HungDMc
+	 */
 	@SuppressWarnings("resource")
-	public static boolean createPDF(String destPath, Data data) {
+	public static String createPDF(Data data) {
+		
 		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			
 			PdfFont timesRegular = PdfFontFactory.createFont(TIMES_REGULAR_FONT_PATH, PdfEncodings.IDENTITY_H);
 			PdfFont timesBold = PdfFontFactory.createFont(TIMES_BOLD_FONT_PATH, PdfEncodings.IDENTITY_H);
 			PdfFont tahomaRegular = PdfFontFactory.createFont(TAHOMA_REGULAR_FONT_PATH, PdfEncodings.IDENTITY_H);
@@ -115,7 +193,7 @@ public class CreatePDF {
 
 			PageSize pageSize = new PageSize(PageSize.A4).clone();
 			
-			PdfWriter pdfWriter = new PdfWriter(destPath);
+			PdfWriter pdfWriter = new PdfWriter(baos);
 	        PdfDocument pdfDoc = new PdfDocument(pdfWriter);
 	        Document doc = new Document(pdfDoc, pageSize);
 	        
@@ -227,14 +305,30 @@ public class CreatePDF {
 	        pdfDoc.close();
 		    doc.close();
 		    
-		    return true;
+		    // Lưu mảng bytes file PDF dưới dạng chuỗi Base64
+		    String base64 = Base64.encodeBytes(baos.toByteArray());
+		    baos.close();
+		    
+		    return base64;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return false;
+		return null;
 	}
 	
+	/**
+	 * Chèn thêm text vào văn bản PDF
+	 * 
+	 * @param content nội dung chèn
+	 * @param margin khoảng các so với viền của văn bản (khoảng cách với: Left, Top, Right, Bottom)
+	 * @param fontSize cỡ chữ 
+	 * @param color màu chữ
+	 * @param font font chữ
+	 * @param rectangle hình chữ nhật bao bọc Paragraph
+	 * @param pdfDoc tài liệu PDF
+	 * @author HungDMc
+	 */
 	@SuppressWarnings("resource")
 	private static void _appendSingleText(String content, int margin, int fontSize, 
 			Color color, PdfFont font, Rectangle rectangle, PdfDocument pdfDoc) {
@@ -247,6 +341,14 @@ public class CreatePDF {
 		new Canvas(new PdfCanvas(pdfDoc.getFirstPage()), pdfDoc, rectangle).add(paragraph);
 	}
 	
+	/**
+	 * Chèn thêm text vào văn bản PDF với 1 viền bo tròn 4 góc của Paragraph
+	 * 
+	 * @param pg Paragraph chứa nội dung chèn vào văn bản PDF
+	 * @param rectangle hình chữ nhật bao bọc Paragraph
+	 * @param pdfDoc tài liệu PDF
+	 * @author HungDMc
+	 */
 	@SuppressWarnings("resource")
 	private static void _appendTextWithRoundedBorder(Paragraph pg, Rectangle rectangle, PdfDocument pdfDoc) {
 		pg.setPaddings(3, 10, 3, 10);
@@ -259,6 +361,12 @@ public class CreatePDF {
 		new Canvas(new PdfCanvas(pdfDoc.getFirstPage()), pdfDoc, rectangle).add(pg);
 	}
 	
+	/**
+	 * Class tạo border cho Paragraph
+	 * 
+	 * @author HungDMc
+	 *
+	 */
 	private static class BorderParagraphRenderer extends ParagraphRenderer {
         public BorderParagraphRenderer(Paragraph modelElement) {
             super(modelElement);
