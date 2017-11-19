@@ -62,7 +62,7 @@ public class HtmlTagHandleRuntime {
 				
 				String tagName = annotation.tagName().toLowerCase();
 				if (!listHtmlTags.contains(tagName)) {
-					throw new Exception("tagName không phải là một tag trong Html");
+					throw new Exception("\"" + tagName + "\" không phải là một tag trong Html");
 				}
 				
 				String style = annotation.style();
