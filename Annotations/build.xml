@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="AUGAnnotations" default="compress" basedir=".">
+	<property name="jar.filename" value="AUGAnnotations.jar"/>
+	<property name="build" value="build"/>
+	<property name="dist" value="dist"/>
+	
+	<target name="init">
+		<echo>#init executing...</echo>
+		<mkdir dir="${build}/classes" />
+		<mkdir dir="${dist}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>#compile executing...</echo>
+		<javac destdir="${build}/classes" includeantruntime="true" debug="true" srcdir="src"/>
+	</target>
+
+	<target name="compress" depends="compile">
+		<echo>#compress executing...</echo>
+		<jar destfile="${dist}/${jar.filename}" basedir="${build}/classes" encoding="utf-8">
+			<metainf dir="META-INF"/>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<echo>#clean executing...</echo>
+		<delete dir="${dist}" verbose="true"/>
+		<delete dir="${build}" verbose="true"/>
+	</target>
+	
+</project>

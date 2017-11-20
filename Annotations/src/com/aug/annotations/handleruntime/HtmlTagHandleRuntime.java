@@ -3,6 +3,7 @@
  */
 package com.aug.annotations.handleruntime;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -51,7 +52,6 @@ public class HtmlTagHandleRuntime {
 		String className = clazz.getSimpleName();
 		StringBuilder sb = new StringBuilder();
 		sb.append("<meta charset=\"UTF-8\">");
-		sb.append("<center>");
 		sb.append("<h1>" + className + "</h1>");
 		
 		for (Field field : fields) {
@@ -76,8 +76,6 @@ public class HtmlTagHandleRuntime {
 			}
 		}
 		
-		sb.append("</center>");
-		
 		saveFile(sb.toString());
 	}
 	
@@ -97,8 +95,11 @@ public class HtmlTagHandleRuntime {
 				
 				FileWriter fw = null;
 				try {
-					fw = new FileWriter(jfc.getSelectedFile());
-					fw.write(content);
+					File file = jfc.getSelectedFile();
+					if (file != null) {
+						fw = new FileWriter(file);
+						fw.write(content);
+					}					
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
@@ -110,12 +111,9 @@ public class HtmlTagHandleRuntime {
 						}
 					}
 				}
+				
+				System.out.println("#saveFile(?): done.");
 			}
 		});
-	}
-	
-	public static void main(String[] args) {
-		HtmlTagHandleRuntime handle = new HtmlTagHandleRuntime();
-		handle.saveFile("");
 	}
 }
