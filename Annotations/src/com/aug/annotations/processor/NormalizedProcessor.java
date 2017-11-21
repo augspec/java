@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.aug.annotations.processor;
 
 import java.util.Set;
@@ -11,14 +14,19 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic.Kind;
 
-//Có tác dụng với @HtmlTag
-@SupportedAnnotationTypes("com.aug.annotations.HtmlTag")
+/**
+ * Xử lý cảnh báo sử dụng @Normalized trong quá trình code.
+ * 
+ * @author AUG
+ *
+ */
+//Có tác dụng với @Normalized
+@SupportedAnnotationTypes("com.aug.annotations.Normalized")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
-public class HtmlTagProcessor extends AbstractProcessor {
+public class NormalizedProcessor extends AbstractProcessor {
 
 	private Messager messager;
 	
@@ -27,24 +35,18 @@ public class HtmlTagProcessor extends AbstractProcessor {
 		messager = processingEnv.getMessager();
 	}
 
-	// annotations - là các Annotation chịu tác dụng của Processor này.
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations,
 			RoundEnvironment roundEnv) {
-		
-		for (TypeElement annotation : annotations) {
-			Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(annotation);
+
+		for (TypeElement ann : annotations) {
+			Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(ann);
 			
 			for (Element element : elements) {
-				
 				if (element.getKind() != ElementKind.FIELD) {
-					messager.printMessage(Kind.ERROR, "@HtmlTag chỉ sử dụng cho field", element);
-				} else {
-					Set<Modifier> modifiers = element.getModifiers();
-					
-					if (!modifiers.contains(Modifier.PRIVATE)) {
-						messager.printMessage(Kind.ERROR, "@HtmlTag chỉ sử dụng cho field private", element);
-					}
+					messager.printMessage(Kind.ERROR, "@Normalized chỉ sử dụng cho field", element);
+				} else if (!element.asType().toString().equals("java.lang.String")) {
+					messager.printMessage(Kind.ERROR, "@Normalized chỉ sử dụng cho kiểu trả về String", element);
 				}
 			}
 		}

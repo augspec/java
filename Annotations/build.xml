@@ -4,6 +4,12 @@
 	<property name="build" value="build"/>
 	<property name="dist" value="dist"/>
 	
+	<path id="compile.classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
 	<target name="init">
 		<echo>#init executing...</echo>
 		<mkdir dir="${build}/classes" />
@@ -12,13 +18,16 @@
 
 	<target name="compile" depends="init">
 		<echo>#compile executing...</echo>
-		<javac destdir="${build}/classes" includeantruntime="true" debug="true" srcdir="src"/>
+		<javac destdir="${build}/classes" includeantruntime="true" debug="true" srcdir="src">
+			<classpath refid="compile.classpath" />
+		</javac>
 	</target>
 
 	<target name="compress" depends="compile">
 		<echo>#compress executing...</echo>
 		<jar destfile="${dist}/${jar.filename}" basedir="${build}/classes" encoding="utf-8">
 			<metainf dir="META-INF"/>
+			<zipgroupfileset dir="lib" includes="*.jar"/>
 		</jar>
 	</target>
 
