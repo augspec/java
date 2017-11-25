@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.aug.annotations.hibernate.Column;
+import com.aug.annotations.hibernate.Id;
 import com.aug.annotations.hibernate.Table;
 import com.aug.annotations.util.Constant.JsonKey;
 
@@ -25,11 +26,11 @@ public class HibernateHandleRuntime {
 	 * Xử lý runtime cho @Table, @Column
 	 * 
 	 * @param obj object sử dụng @Table, @Column
-	 * @return trả về chuỗi JSON hoặc null.
+	 * @return trả về một JsonObject hoặc null.
 	 * @author AUG
 	 */
 	@SuppressWarnings("unchecked")
-	public String processing(Object obj) {
+	public JSONObject processing(Object obj) {
 		if (obj == null)
 			return null;
 		
@@ -48,7 +49,8 @@ public class HibernateHandleRuntime {
 			// Xử lý các fields
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field field : fields) {
-				if (field.isAnnotationPresent(Column.class)) {
+				if (field.isAnnotationPresent(Column.class) 
+						&& !field.isAnnotationPresent(Id.class)) {
 					Column column = field.getAnnotation(Column.class);
 					if (column == null)
 						continue;
@@ -73,6 +75,7 @@ public class HibernateHandleRuntime {
 			for (Method method : methods) {
 				// Kiểm tra nếu có đánh dấu @Column và là getter
 				if (method.isAnnotationPresent(Column.class) 
+						&& !method.isAnnotationPresent(Id.class) 
 						&& method.getName().startsWith("get")) {
 					Column column = method.getAnnotation(Column.class);
 					if (column == null)
@@ -96,6 +99,6 @@ public class HibernateHandleRuntime {
 			root.put(JsonKey.COLUMN, columns);
 		}
 		
-		return root.toJSONString();
+		return root;
 	}
 }

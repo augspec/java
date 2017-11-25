@@ -11,8 +11,11 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * @author AUG
@@ -28,9 +31,15 @@ public class ConnectionPool {
 	private static GenericObjectPool gPool = null;
 	private static DataSource dataSource = null;
 			
-	public ConnectionPool() throws Exception {
+	public ConnectionPool(Class<?> clazz) {
 		super();
-		dataSource = setUpPool();
+		try {
+			configure(clazz);
+			dataSource = setUpPool();
+			printDbStatus();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public DataSource setUpPool() throws Exception {
@@ -56,5 +65,16 @@ public class ConnectionPool {
 	
 	private void printDbStatus() {
 		System.out.println("Max.: " + getConnectionPool().getMaxActive() + "; Active: " + getConnectionPool().getNumActive() + "; Idle: " + getConnectionPool().getNumIdle());
+	}
+	
+	public void configure(Class<?> clazz) throws IOException {
+		InputStream is = clazz.getClassLoader().getResourceAsStream("hibernate.properties");
+		Properties prop = new Properties();
+		prop.load(is);
+		
+		jdbcDriver = prop.getProperty("jdbc.driver");
+		jdbcDbUrl = prop.getProperty("jdbc.db.url");
+		jdbcUser = prop.getProperty("jdbc.user");
+		jdbcPassword = prop.getProperty("jdbc.passwd");
 	}
 }
