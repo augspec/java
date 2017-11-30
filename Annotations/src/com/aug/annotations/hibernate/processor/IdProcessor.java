@@ -1,4 +1,7 @@
-package com.aug.annotations.processor;
+/**
+ * 
+ */
+package com.aug.annotations.hibernate.processor;
 
 import java.util.Set;
 
@@ -11,14 +14,18 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic.Kind;
 
-//Có tác dụng với @HtmlTag
-@SupportedAnnotationTypes("com.aug.annotations.HtmlTag")
+/**
+ * Chỉ dẫn trình biên dịch khi sử dụng @Id
+ * 
+ * @author AUG
+ *
+ */
+@SupportedAnnotationTypes("com.aug.annotations.hibernate.Id")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
-public class HtmlTagProcessor extends AbstractProcessor {
+public class IdProcessor extends AbstractProcessor {
 
 	private Messager messager;
 	
@@ -27,29 +34,24 @@ public class HtmlTagProcessor extends AbstractProcessor {
 		messager = processingEnv.getMessager();
 	}
 
-	// annotations - là các Annotation chịu tác dụng của Processor này.
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations,
 			RoundEnvironment roundEnv) {
-		
-		for (TypeElement annotation : annotations) {
-			Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(annotation);
+
+		for (TypeElement ann : annotations) {
+			Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(ann);
 			
 			for (Element element : elements) {
-				
-				if (element.getKind() != ElementKind.FIELD) {
-					messager.printMessage(Kind.ERROR, "@HtmlTag chỉ sử dụng cho field", element);
-				} else {
-					Set<Modifier> modifiers = element.getModifiers();
-					
-					if (!modifiers.contains(Modifier.PRIVATE)) {
-						messager.printMessage(Kind.ERROR, "@HtmlTag chỉ sử dụng cho field private", element);
-					}
+				if (element.getKind() != ElementKind.FIELD 
+						&& element.getKind() != ElementKind.METHOD) {
+					messager.printMessage(Kind.ERROR, "@Id chỉ sử dụng cho field hoặc method", element);
+				} else if (element.getKind() == ElementKind.METHOD 
+						&& !element.getSimpleName().toString().startsWith("get")) {
+					messager.printMessage(Kind.ERROR, "@Id chỉ sử dụng cho method có tên bắt đầu là \"get\"", element);
 				}
 			}
 		}
 		
 		return true;
 	}
-
 }

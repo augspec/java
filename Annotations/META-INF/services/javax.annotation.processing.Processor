@@ -1,1 +1,5 @@
 com.aug.annotations.processor.HtmlTagProcessor
+com.aug.annotations.processor.NormalizedProcessor
+com.aug.annotations.hibernate.processor.TableProcessor
+com.aug.annotations.hibernate.processor.ColumnProcessor
+com.aug.annotations.hibernate.processor.IdProcessor
