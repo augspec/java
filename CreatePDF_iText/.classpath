@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/iText_CreatePDF"/>
-	<classpathentry kind="lib" path="C:/Users/AUG/Desktop/slf4j-1.7.25/slf4j-api-1.7.25.jar"/>
-	<classpathentry kind="lib" path="C:/Users/AUG/Desktop/slf4j-1.7.25/slf4j-simple-1.7.25.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/java/Libs/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="D:/GitHub/java/Libs/slf4j-simple-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
