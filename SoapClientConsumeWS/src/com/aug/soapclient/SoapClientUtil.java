@@ -39,8 +39,7 @@ public class SoapClientUtil {
         soapPart.setContent(preppedMsgSrc);
 
         message.saveChanges();
-
-        System.out.println(message.getSOAPBody().getFirstChild().getTextContent());
+        
         SOAPMessage response = (SOAPMessage) dispatch.invoke(message);
 
         return response;
