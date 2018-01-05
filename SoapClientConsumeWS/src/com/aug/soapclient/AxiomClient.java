@@ -19,6 +19,7 @@ import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
+import org.apache.axis2.transport.http.HTTPConstants;
 
 public class AxiomClient {
 	
@@ -31,8 +32,9 @@ public class AxiomClient {
 	        Options opts = new Options();
 	        opts.setTo(new EndpointReference("https://103.9.200.65:9999/TaxServiceExt.svc?wsdl"));
 	        opts.setAction("http://tempuri.org/ITaxServiceExt/getTaxInfo");
-	        opts.setProperty(org.apache.axis2.transport.http.HTTPConstants.CHUNKED, Boolean.FALSE);
+	        opts.setProperty(org.apache.axis2.transport.http.HTTPConstants.CHUNKED, Boolean.TRUE);
 	        opts.setSoapVersionURI(SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI);
+	        opts.setTimeOutInMilliSeconds(60000);  // 1 phut
 	        
 	        serviceClient.engageModule("addressing");
 	        serviceClient.setOptions(opts);
@@ -113,7 +115,7 @@ public class AxiomClient {
 	}
 
     public static void main(String[] args)throws AxisFault, ParseException {
-        TaxInfo info = getTaxInfo("0101360697");
-        System.out.println("MST: " + info.getMaSoThue() + "\nTenGiaoDich: " + info.getTenGiaoDich() + "\nNgayDangKyMST: " + info.getNgayDangKyMST());
+        TaxInfo info = getTaxInfo("0309532909");
+        System.out.println(info.toString());
     }
 }

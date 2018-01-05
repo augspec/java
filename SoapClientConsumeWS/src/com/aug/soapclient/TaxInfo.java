@@ -1,6 +1,10 @@
 package com.aug.soapclient;
 
+import java.lang.reflect.Field;
 import java.util.Date;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class TaxInfo {
 	
@@ -342,6 +346,30 @@ public class TaxInfo {
 
 	public void setTrangThaiHoatDong(String trangThaiHoatDong) {
 		TrangThaiHoatDong = trangThaiHoatDong;
+	}
+
+	@Override
+	public String toString() {
+		Field[] fields = this.getClass().getDeclaredFields();
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		
+		int index = 0;
+		for (Field field : fields) {
+			field.setAccessible(true);
+			try {
+				sb.append("\n\t\"" + field.getName() + "\": \"" + field.get(this) + "\"");
+				if (index < fields.length - 1)
+					sb.append(",");
+				index++;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			field.setAccessible(false);
+		}
+		sb.append("\n}");
+		
+		return sb.toString();
 	}
 	
 }
