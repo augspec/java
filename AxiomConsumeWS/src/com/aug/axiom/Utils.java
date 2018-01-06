@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Utilities function
+ * 
+ * @author AUG
+ *
+ */
 public class Utils {
 
 	private static Properties prop;

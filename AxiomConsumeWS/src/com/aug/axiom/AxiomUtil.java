@@ -15,18 +15,47 @@ import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
+/**
+ * Handler call web service.
+ * 
+ * @author AUG
+ *
+ */
 public class AxiomUtil {
 
 	public static final String ENPOINT_URI = "Some enpoint";
 	
+	/**
+	 * Absolute path of axis2 repository, read by key 'axiom-ws.repository' from axiom-config.properties
+	 */
 	public static final String REPOSITORY_PATH = Utils.getProp().getProperty("axiom-ws.repository");
+	
+	/**
+	 * Absolute path of axis2 xml configuration file, read by key 'axiom-ws.axis2xml' from axiom-config.properties
+	 */
 	public static final String AXIS2XML_PATH = Utils.getProp().getProperty("axiom-ws.axis2xml");
+	
+	/**
+	 * Boolean value to set property org.apache.axis2.transport.http.HTTPConstants.CHUNKED for ServiceClient
+	 */
 	public static final boolean CHUNKED = Utils.getProp().getProperty("axiom-ws.transport.chunked")
 			.equalsIgnoreCase("true") ? true : false;
+	
+	/**
+	 * Soap version set for ServiceClient
+	 */
 	public static final boolean IS_SOAP12 = Utils.getProp().getProperty("axiom-ws.soap12")
 			.equalsIgnoreCase("true") ? true : false;
+	
+	/**
+	 * Timeout when call web service (milliseconds)
+	 */
 	public static final int TIMEOUT = isNullOrEmplty(Utils.getProp().getProperty("axiom-ws.timeOutInMilliSeconds")) ? 0 
 			: Integer.valueOf(Utils.getProp().getProperty("axiom-ws.timeOutInMilliSeconds"));
+	
+	/**
+	 * Boolean value to set engage module 'addressing'
+	 */
 	public static final boolean IS_ENGAGE_ADDRESSING = Utils.getProp().getProperty("axiom-ws.engageModule.addressing")
 			.equalsIgnoreCase("true") ? true : false;
 	
@@ -50,7 +79,7 @@ public class AxiomUtil {
 		}
 	}
 	
-	public static OMElement createPayload(String namespace, String method, Map<String, Object> paramsAndValuesMap) {
+	private static OMElement _createPayload(String namespace, String method, Map<String, Object> paramsAndValuesMap) {
 		if (isNullOrEmplty(namespace) || isNullOrEmplty(method))
 			return null;
 		
@@ -73,19 +102,33 @@ public class AxiomUtil {
 		return methodExecute;
 	}
 	
-	public static OMElement callService(String enpointUri, String action, String namespace, 
-			String method, Map<String, Object> paramsAndValuesMap) {
-		// TODO: validate
-		OMElement payload = createPayload(namespace, method, paramsAndValuesMap);
+	/**
+	 * Call a web service method and return OMElement.
+	 * 
+	 * @param enpointUri is WSDL address.
+	 * @param soapAction is soapAction in WSDL document.
+	 * @param targetNamspace is targetNamespace attribute in tag root of WSDL document.
+	 * @param method is name of method (action) to call web service.
+	 * @param paramsAndValuesMap is list of parameters of method store in Map&lt;String, Object&gt; 
+	 * with parameter name is key (String) and value is an object (recommended String).
+	 * @return OMElement contain result when execute web service successfully, otherwise return null.
+	 * @throws Exception contain a message to notice.
+	 * @author AUG
+	 */
+	public static OMElement callService(String enpointUri, String soapAction, String targetNamspace, 
+			String method, Map<String, Object> paramsAndValuesMap) throws Exception {
+		if (isNullOrEmplty(enpointUri) || isNullOrEmplty(soapAction) 
+				|| isNullOrEmplty(targetNamspace) || isNullOrEmplty(method))
+			throw new Exception("Some parameters value is null or empty!");
 		
 		Options opts = new Options();
 		opts.setTo(new EndpointReference(enpointUri));
-		opts.setAction(action);
+		opts.setAction(soapAction);
 		serviceClient.setOverrideOptions(opts);
 		
 		OMElement result = null;
 		try {
-			result = serviceClient.sendReceive(payload);
+			result = serviceClient.sendReceive(_createPayload(targetNamspace, method, paramsAndValuesMap));
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		} finally {
@@ -104,11 +147,6 @@ public class AxiomUtil {
 		}
 		
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		
-		System.out.println(TIMEOUT);
 	}
 	
 	private static boolean isNullOrEmplty (String str) {
