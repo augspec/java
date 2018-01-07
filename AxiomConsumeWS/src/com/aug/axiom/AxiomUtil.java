@@ -107,7 +107,7 @@ public class AxiomUtil {
 	 * 
 	 * @param enpointUri is WSDL address.
 	 * @param soapAction is soapAction in WSDL document.
-	 * @param targetNamspace is targetNamespace attribute in tag root of WSDL document.
+	 * @param targetNamespace is targetNamespace attribute in tag root of WSDL document.
 	 * @param method is name of method (action) to call web service.
 	 * @param paramsAndValuesMap is list of parameters of method store in Map&lt;String, Object&gt; 
 	 * with parameter name is key (String) and value is an object (recommended String).
@@ -115,10 +115,10 @@ public class AxiomUtil {
 	 * @throws Exception contain a message to notice.
 	 * @author AUG
 	 */
-	public static OMElement callService(String enpointUri, String soapAction, String targetNamspace, 
+	public static OMElement callService(String enpointUri, String soapAction, String targetNamespace, 
 			String method, Map<String, Object> paramsAndValuesMap) throws Exception {
 		if (isNullOrEmplty(enpointUri) || isNullOrEmplty(soapAction) 
-				|| isNullOrEmplty(targetNamspace) || isNullOrEmplty(method))
+				|| isNullOrEmplty(targetNamespace) || isNullOrEmplty(method))
 			throw new Exception("Some parameters value is null or empty!");
 		
 		Options opts = new Options();
@@ -128,7 +128,7 @@ public class AxiomUtil {
 		
 		OMElement result = null;
 		try {
-			result = serviceClient.sendReceive(_createPayload(targetNamspace, method, paramsAndValuesMap));
+			result = serviceClient.sendReceive(_createPayload(targetNamespace, method, paramsAndValuesMap));
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		} finally {
