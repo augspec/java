@@ -10,17 +10,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.aug.db.DataSource;
-import com.aug.db.entities.User;
+import com.aug.db.entities.Region;
 
-public class UserDbHandle implements DbHandleAPI<User> {
+public class RegionDbHandle implements DbHandleAPI<Region> {
 
-	private static final Logger _LOG = Logger.getLogger(UserDbHandle.class);
+	private static final Logger _LOG = Logger.getLogger(RegionDbHandle.class);
 	Connection conn;
 	PreparedStatement ps;
 	ResultSet rs;
 	
 	@Override
-	public boolean create(User object) {
+	public boolean create(Region object) {
 		if (object == null) {
 			_LOG.error("#create(?): tham so dau vao null!");
 			return false;
@@ -35,16 +35,15 @@ public class UserDbHandle implements DbHandleAPI<User> {
 			}
 			
 			StringBuilder query = new StringBuilder("INSERT INTO ");
-			query.append("user(username, password, nicename, email, address, permission) ");
-			query.append("VALUES(?, ?, ?, ?, ?, ?)");
+			query.append("region(id, name, code, active, parent_id) ");
+			query.append("VALUES(?, ?, ?, ?, ?)");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setString(1, object.getUsername());
-			ps.setString(2, object.getPassword());
-			ps.setString(3, object.getNicename());
-			ps.setString(4, object.getEmail());
-			ps.setString(5, object.getAddress());
-			ps.setString(6, object.getPermission());
+			ps.setInt(1, object.getId());
+			ps.setString(2, object.getName());
+			ps.setString(3, object.getCode());
+			ps.setBoolean(4, object.isActive());
+			ps.setInt(5, object.getParentId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
@@ -63,7 +62,7 @@ public class UserDbHandle implements DbHandleAPI<User> {
 	}
 
 	@Override
-	public boolean update(User object) {
+	public boolean update(Region object) {
 		if (object == null) {
 			_LOG.error("#update(?): tham so dau vao null!");
 			return false;
@@ -77,17 +76,15 @@ public class UserDbHandle implements DbHandleAPI<User> {
 				return false;
 			}
 			
-			StringBuilder query = new StringBuilder("UPDATE user SET username=?, password=?, nicename=?, ");
-			query.append("email=?, address=?, permission=? WHERE id=? ");
+			StringBuilder query = new StringBuilder("UPDATE region SET name=?, code=?, active=?, ");
+			query.append("parent_id=? WHERE id=? ");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setString(1, object.getUsername());
-			ps.setString(2, object.getPassword());
-			ps.setString(3, object.getNicename());
-			ps.setString(4, object.getEmail());
-			ps.setString(5, object.getAddress());
-			ps.setString(6, object.getPermission());
-			ps.setInt(7, object.getId());
+			ps.setString(1, object.getName());
+			ps.setString(2, object.getCode());
+			ps.setBoolean(3, object.isActive());
+			ps.setInt(4, object.getParentId());
+			ps.setInt(5, object.getId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
@@ -106,7 +103,7 @@ public class UserDbHandle implements DbHandleAPI<User> {
 	}
 
 	@Override
-	public boolean delete(User object) {
+	public boolean delete(Region object) {
 		if (object == null) {
 			_LOG.error("#delete(?): tham so dau vao null!");
 			return false;
@@ -120,7 +117,7 @@ public class UserDbHandle implements DbHandleAPI<User> {
 				return false;
 			}
 			
-			StringBuilder query = new StringBuilder("DELETE FROM user WHERE id=?");
+			StringBuilder query = new StringBuilder("DELETE FROM region WHERE id=?");
 			
 			ps = conn.prepareStatement(query.toString());
 			ps.setInt(1, object.getId());
@@ -142,7 +139,7 @@ public class UserDbHandle implements DbHandleAPI<User> {
 	}
 
 	@Override
-	public List<User> getAll() {
+	public List<Region> getAll() {
 		try {
 			conn = DataSource.getConnection();
 			
@@ -151,23 +148,21 @@ public class UserDbHandle implements DbHandleAPI<User> {
 				return null;
 			}
 			
-			StringBuilder query = new StringBuilder("SELECT id, username, password, ");
-			query.append("nicename, email, address, permission FROM user");
+			StringBuilder query = new StringBuilder("SELECT id, name, code, ");
+			query.append("active, parent_id FROM region");
 			
 			ps = conn.prepareStatement(query.toString());
 			rs = ps.executeQuery();
 			
-			List<User> list = new ArrayList<User>();
-			User temp = null;
+			List<Region> list = new ArrayList<Region>();
+			Region temp = null;
 			while (rs.next()) {
-				temp = new User();
+				temp = new Region();
 				temp.setId(rs.getInt("id"));
-				temp.setUsername(rs.getString("username"));
-				temp.setPassword(rs.getString("password"));
-				temp.setNicename(rs.getString("nicename"));
-				temp.setEmail(rs.getString("email"));
-				temp.setAddress(rs.getString("address"));
-				temp.setPermission(rs.getString("permission"));
+				temp.setName(rs.getString("name"));
+				temp.setCode(rs.getString("code"));
+				temp.setActive(rs.getBoolean("active"));
+				temp.setParentId(rs.getInt("parent_id"));
 				
 				list.add(temp);
 			}
