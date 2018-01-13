@@ -1,0 +1,14 @@
+#friend-header {
+	border: 1px solid red;
+	padding: 50px;
+}
+
+#friend-body {
+	border: 1px solid green;
+	padding: 50px;
+}
+
+#friend-footer {
+	border: 1px solid blue;
+	padding: 50px;
+}

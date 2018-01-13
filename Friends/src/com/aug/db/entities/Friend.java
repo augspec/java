@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Friend implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private int rowid;
 	private String name;
 	private String phone;
 	private String email;
@@ -21,10 +22,11 @@ public class Friend implements Serializable {
 		super();
 	}
 
-	public Friend(String name, String phone, String email, String address,
+	public Friend(int rowid, String name, String phone, String email, String address,
 			String group, String state, String district, String wards,
 			String inviteStatus, String money, String description) {
 		super();
+		this.rowid = rowid;
 		this.name = name;
 		this.phone = phone;
 		this.email = email;
@@ -38,6 +40,14 @@ public class Friend implements Serializable {
 		this.description = description;
 	}
 
+	public int getRowid() {
+		return rowid;
+	}
+	
+	public void setRowid(int rowid) {
+		this.rowid = rowid;
+	}
+	
 	public String getName() {
 		return name;
 	}
