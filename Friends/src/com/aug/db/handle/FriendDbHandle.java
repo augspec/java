@@ -36,7 +36,8 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 			
 			StringBuilder query = new StringBuilder("INSERT INTO ");
 			query.append("friend(name, phone, email, address, _group, state, district, ");
-			query.append("wards, invite_status, money, description) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			query.append("wards, invite_status, money, description, username) ");
+			query.append("VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			
 			ps = conn.prepareStatement(query.toString());
 			ps.setString(1, object.getName());
@@ -50,6 +51,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 			ps.setString(9, object.getInviteStatus());
 			ps.setString(10, object.getMoney());
 			ps.setString(11, object.getDescription());
+			ps.setString(12, object.getUsername());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
@@ -84,7 +86,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 			
 			StringBuilder query = new StringBuilder("UPDATE friend SET name=?, phone=?, email=?, ");
 			query.append("address=?, _group=?, state=?, district=?, wards=?, invite_status=?, ");
-			query.append("money=?, description=? WHERE rowid=?");
+			query.append("money=?, description=?, username=? WHERE rowid=?");
 			
 			ps = conn.prepareStatement(query.toString());
 			ps.setString(1, object.getName());
@@ -98,7 +100,8 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 			ps.setString(9, object.getInviteStatus());
 			ps.setString(10, object.getMoney());
 			ps.setString(11, object.getDescription());
-			ps.setInt(12, object.getRowid());
+			ps.setString(12, object.getUsername());
+			ps.setInt(13, object.getRowid());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
@@ -163,7 +166,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 			}
 			
 			StringBuilder query = new StringBuilder("SELECT rowid, name, phone, email, address, _group, ");
-			query.append("state, district, wards, invite_status, money, description FROM friend");
+			query.append("state, district, wards, invite_status, money, description, username FROM friend");
 			
 			ps = conn.prepareStatement(query.toString());
 			rs = ps.executeQuery();
@@ -184,6 +187,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 				temp.setInviteStatus(rs.getString("invite_status"));
 				temp.setMoney(rs.getString("money"));
 				temp.setDescription(rs.getString("description"));
+				temp.setUsername(rs.getString("username"));
 				
 				list.add(temp);
 			}

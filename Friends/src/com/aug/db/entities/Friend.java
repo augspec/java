@@ -17,6 +17,7 @@ public class Friend implements Serializable {
 	private String inviteStatus;
 	private String money;
 	private String description;
+	private String username;
 	
 	public Friend() {
 		super();
@@ -24,7 +25,7 @@ public class Friend implements Serializable {
 
 	public Friend(int rowid, String name, String phone, String email, String address,
 			String group, String state, String district, String wards,
-			String inviteStatus, String money, String description) {
+			String inviteStatus, String money, String description, String username) {
 		super();
 		this.rowid = rowid;
 		this.name = name;
@@ -38,6 +39,7 @@ public class Friend implements Serializable {
 		this.inviteStatus = inviteStatus;
 		this.money = money;
 		this.description = description;
+		this.username = username;
 	}
 
 	public int getRowid() {
@@ -134,6 +136,14 @@ public class Friend implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 }

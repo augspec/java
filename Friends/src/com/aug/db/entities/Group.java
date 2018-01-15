@@ -8,16 +8,18 @@ public class Group implements Serializable {
 	private int id;
 	private String name;
 	private String description;
+	private int userId;
 	
 	public Group() {
 		
 	}
 
-	public Group(int id, String name, String description) {
+	public Group(int id, String name, String description, int userId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.userId = userId;
 	}
 
 	public int getId() {
@@ -42,6 +44,14 @@ public class Group implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 }

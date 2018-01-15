@@ -35,13 +35,14 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 			}
 			
 			StringBuilder query = new StringBuilder("INSERT INTO ");
-			query.append("`group`(id, name, description) ");
-			query.append("VALUES(?, ?, ?)");
+			query.append("`group`(id, name, description, user_id) ");
+			query.append("VALUES(?, ?, ?, ?)");
 			
 			ps = conn.prepareStatement(query.toString());
 			ps.setInt(1, object.getId());
 			ps.setString(2, object.getName());
 			ps.setString(3, object.getDescription());
+			ps.setInt(4, object.getUserId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
@@ -74,12 +75,13 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 				return false;
 			}
 			
-			StringBuilder query = new StringBuilder("UPDATE `group` SET name=?, description=? ");
-			query.append("WHERE id=?");
+			StringBuilder query = new StringBuilder("UPDATE `group` SET name=?, description=?, ");
+			query.append("user_id=? WHERE id=?");
 			
 			ps = conn.prepareStatement(query.toString());
 			ps.setString(1, object.getName());
 			ps.setString(2, object.getDescription());
+			ps.setInt(3, object.getUserId());
 			ps.setInt(3, object.getId());
 			
 			return ps.executeUpdate() > 0;
@@ -144,7 +146,7 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 				return null;
 			}
 			
-			StringBuilder query = new StringBuilder("SELECT id, name, description FROM `group`");
+			StringBuilder query = new StringBuilder("SELECT id, name, description, user_id FROM `group`");
 			
 			ps = conn.prepareStatement(query.toString());
 			rs = ps.executeQuery();
@@ -156,6 +158,7 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 				temp.setId(rs.getInt("id"));
 				temp.setName(rs.getString("name"));
 				temp.setDescription(rs.getString("description"));
+				temp.setUserId(rs.getInt("user_id"));
 				
 				list.add(temp);
 			}
@@ -180,6 +183,7 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 				}
 			}
 		}
+		
 		return null;
 	}
 }
