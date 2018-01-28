@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.aug.web.util.Encryptor;
 import com.aug.web.util.FriendUtil;
+import com.aug.web.util.Constants.KeyInitVectorEncryptor;
 
 public class LoginServlet extends HttpServlet {
 
@@ -23,11 +25,11 @@ public class LoginServlet extends HttpServlet {
 		String password = null;
 		for (Cookie c : cookies) {
 			if (c.getName().equals("aug_c_username")) {
-				username = c.getValue();
+				username = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
 			}
 			
 			if (c.getName().equals("aug_c_password")) {
-				password = c.getValue();
+				password = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
 			}
 		}
 		
@@ -36,11 +38,11 @@ public class LoginServlet extends HttpServlet {
 			req.setAttribute("username", username);
 			req.setAttribute("password", password);
 			
-			req.getRequestDispatcher("/index.jsp").forward(req, resp);
+			req.getRequestDispatcher("/manage").forward(req, resp);
+			
 			return;
 		}
-		
-		System.out.println("running in here");
+
 		req.getRequestDispatcher("/login.jsp").forward(req, resp);
 	}
 

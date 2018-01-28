@@ -13,6 +13,7 @@
   	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/friend.css" type="text/css"/>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.9.1.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/bootstrap/js/alert.js"></script>
   	<title><jsp:invoke fragment="title"/></title>
   </head>
   <body>
@@ -38,6 +39,16 @@
 		              <li><a href="#">Group</a></li>
 		              <li><a href="#">User</a></li>
 		            </ul>
+		            <ul class="nav navbar-nav navbar-right">
+				        <li class="dropdown">
+				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome <b>${sessionScope.user.username }</b> <span class="caret"></span></a>
+				          <ul class="dropdown-menu">
+				            <li><a href="#">View profile</a></li>
+				            <li role="separator" class="divider"></li>
+				            <li><a href="${pageContext.request.contextPath }/logout">Logout</a></li>
+				          </ul>
+				        </li>
+				    </ul>
 		          </div><!--/.nav-collapse -->
 		        </div><!--/.container-fluid -->
 		      </nav>

@@ -8,6 +8,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,8 +29,30 @@ public class FriendFilter implements Filter {
 		HttpServletRequest servletRequest = (HttpServletRequest) req;
 		HttpServletResponse servletResponse = (HttpServletResponse) resp;
 		
-		// TODO: do something here to filters
-		System.out.println("doFilter is runned.");
+		String requestUri = servletRequest.getRequestURI();
+		requestUri = requestUri.substring(requestUri.lastIndexOf("/") + 1, requestUri.length());
+		
+		if (requestUri.equals("login") || requestUri.isEmpty()) {
+			servletRequest.getSession().invalidate();
+			servletRequest.getRequestDispatcher("/login").forward(servletRequest, servletResponse);
+			
+			return;
+		}
+		
+		if (requestUri.equals("logout")) {
+			Cookie cUsername = new Cookie("aug_c_username", "");
+			Cookie cPassword = new Cookie("aug_c_password", "");
+			cUsername.setMaxAge(0);
+			cPassword.setMaxAge(0);
+			
+			servletResponse.addCookie(cUsername);
+			servletResponse.addCookie(cPassword);
+			
+			servletRequest.getSession().invalidate();
+			servletResponse.sendRedirect(servletRequest.getContextPath() + "/login");
+			
+			return;
+		}
 		
 		chain.doFilter(servletRequest, servletResponse);
 	}
