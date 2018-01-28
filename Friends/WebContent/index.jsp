@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+${sessionScope.user.username }
 <t:genericpage>
 	<jsp:attribute name="title">Friends Project</jsp:attribute>
 	<jsp:attribute name="header"/>

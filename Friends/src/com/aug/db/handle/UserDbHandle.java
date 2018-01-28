@@ -195,4 +195,59 @@ public class UserDbHandle implements DbHandleAPI<User> {
 		return null;
 	}
 	
+	public User getByUsername(String username) {
+		try {
+			conn = DataSource.getConnection();
+			
+			if (conn == null || conn.isClosed()) {
+				_LOG.error("#getByUsername(?): connection null hoac khong the ket noi!");
+				return null;
+			}
+			
+			StringBuilder query = new StringBuilder("SELECT id, username, password, ");
+			query.append("nicename, email, address, permission FROM user WHERE username=?");
+			
+			ps = conn.prepareStatement(query.toString());
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+			
+			User temp = null;
+			if (rs.next()) {
+				temp = new User();
+				temp.setId(rs.getInt("id"));
+				temp.setUsername(rs.getString("username"));
+				temp.setPassword(rs.getString("password"));
+				temp.setNicename(rs.getString("nicename"));
+				temp.setEmail(rs.getString("email"));
+				temp.setAddress(rs.getString("address"));
+				temp.setPermission(rs.getString("permission"));
+				
+			}
+			
+			DataSource.returnConnection(conn);
+			
+			return temp;
+		} catch (Exception e) {
+			_LOG.error("#getByUsername(): " + e.getMessage(), e);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 }

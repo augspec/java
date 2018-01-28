@@ -1,5 +1,7 @@
 package com.aug.db;
 
+import java.io.File;
+
 public class Configuration {
 
 	public String dbUrl;
@@ -17,7 +19,9 @@ public class Configuration {
 	}
 	
 	private void init() {
-		dbUrl = "jdbc:sqlite:friends.sqlite";
+		File f = new File(getClass().getClassLoader().getResource("friends.sqlite").getFile());
+		String path = f.getAbsolutePath().replaceAll("%20", " ");
+		dbUrl = "jdbc:sqlite:" + path;
 		dbDriver = "org.sqlite.JDBC";
 		maxConnections = 5;
 	}
