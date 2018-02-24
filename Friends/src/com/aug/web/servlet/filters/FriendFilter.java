@@ -54,6 +54,15 @@ public class FriendFilter implements Filter {
 			return;
 		}
 		
+		if (requestUri.equals("#") 
+				|| requestUri.equals("manage") 
+				|| requestUri.isEmpty())
+			servletRequest.getSession().setAttribute("tabActive", "friend");
+		else if (requestUri.equals("group"))
+			servletRequest.getSession().setAttribute("tabActive", "group");
+		else if (requestUri.equals("user"))
+			servletRequest.getSession().setAttribute("tabActive", "user");
+		
 		chain.doFilter(servletRequest, servletResponse);
 	}
 

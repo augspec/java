@@ -82,6 +82,9 @@ public class ManageServlet extends HttpServlet {
 					resp.addCookie(cPassword);
 				}
 				
+				if (user.getUsername().equals("admin"))
+					req.getSession().setAttribute("isAdmin", true);
+				
 				req.getSession().setAttribute("user", user);
 				req.getRequestDispatcher("/index.jsp").forward(req, resp);
 			} catch (NoSuchAlgorithmException e) {

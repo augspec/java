@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@tag description="Overall Page template" pageEncoding="UTF-8"%>
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="footer" fragment="true" %>
@@ -35,9 +36,11 @@
 		          </div>
 		          <div id="navbar" class="navbar-collapse collapse">
 		            <ul class="nav navbar-nav">
-		              <li class="active"><a href="#">Friend</a></li>
-		              <li><a href="#">Group</a></li>
-		              <li><a href="#">User</a></li>
+		              <li class="<c:choose><c:when test="${sessionScope.tabActive eq 'friend' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="#">Friend</a></li>
+		              <li class="<c:choose><c:when test="${sessionScope.tabActive eq 'group' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="${pageContext.request.contextPath }/group">Group</a></li>
+		              <c:if test="${sessionScope.isAdmin eq true }">
+		              	<li class="<c:choose><c:when test="${sessionScope.tabActive eq 'user' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="${pageContext.request.contextPath }/user">User</a></li>
+		              </c:if>
 		            </ul>
 		            <ul class="nav navbar-nav navbar-right">
 				        <li class="dropdown">

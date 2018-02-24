@@ -23,13 +23,16 @@ public class LoginServlet extends HttpServlet {
 		
 		String username = null;
 		String password = null;
-		for (Cookie c : cookies) {
-			if (c.getName().equals("aug_c_username")) {
-				username = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
-			}
-			
-			if (c.getName().equals("aug_c_password")) {
-				password = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
+		
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals("aug_c_username")) {
+					username = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
+				}
+				
+				if (c.getName().equals("aug_c_password")) {
+					password = Encryptor.decrypt(KeyInitVectorEncryptor.KEY.getValue(), KeyInitVectorEncryptor.INIT_VECTOR.getValue(), c.getValue());
+				}
 			}
 		}
 		
