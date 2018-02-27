@@ -6,7 +6,8 @@ import java.lang.reflect.Field;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private int rowid;
+	private String id;
 	private String username;
 	private String password;
 	private String nicename;
@@ -18,7 +19,7 @@ public class User implements Serializable {
 		
 	}
 
-	public User(int id, String username, String password, String nicename,
+	public User(String id, String username, String password, String nicename,
 			String email, String address, String permission) {
 		super();
 		this.id = id;
@@ -29,12 +30,20 @@ public class User implements Serializable {
 		this.address = address;
 		this.permission = permission;
 	}
+	
+	public int getRowid() {
+		return rowid;
+	}
 
-	public int getId() {
+	public void setRowid(int rowid) {
+		this.rowid = rowid;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

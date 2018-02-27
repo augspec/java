@@ -5,17 +5,18 @@ import java.io.Serializable;
 public class Region implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private int rowid;
+	private String id;
 	private String name;
 	private String code;
-	private boolean active;
-	private int parentId;
+	private String active;
+	private String parentId;
 	
 	public Region() {
 		
 	}
 
-	public Region(int id, String name, String code, boolean active, int parentId) {
+	public Region(String id, String name, String code, String active, String parentId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -23,12 +24,20 @@ public class Region implements Serializable {
 		this.active = active;
 		this.parentId = parentId;
 	}
+	
+	public int getRowid() {
+		return rowid;
+	}
 
-	public int getId() {
+	public void setRowid(int rowid) {
+		this.rowid = rowid;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -48,19 +57,19 @@ public class Region implements Serializable {
 		this.code = code;
 	}
 
-	public boolean isActive() {
+	public String getActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
-	public int getParentId() {
+	public String getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(int parentId) {
+	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
 	

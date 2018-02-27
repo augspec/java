@@ -28,7 +28,7 @@
         </div> -->
         <script type="text/javascript">
 			$(document).ready(function() {
-				alert("jQuery is ready");
+				
 			});
         </script>
     </jsp:body>

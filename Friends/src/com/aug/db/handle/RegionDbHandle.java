@@ -39,16 +39,17 @@ public class RegionDbHandle implements DbHandleAPI<Region> {
 			query.append("VALUES(?, ?, ?, ?, ?)");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setInt(1, object.getId());
+			ps.setString(1, object.getId());
 			ps.setString(2, object.getName());
 			ps.setString(3, object.getCode());
-			ps.setBoolean(4, object.isActive());
-			ps.setInt(5, object.getParentId());
+			ps.setString(4, object.getActive());
+			ps.setString(5, object.getParentId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#create(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -82,14 +83,15 @@ public class RegionDbHandle implements DbHandleAPI<Region> {
 			ps = conn.prepareStatement(query.toString());
 			ps.setString(1, object.getName());
 			ps.setString(2, object.getCode());
-			ps.setBoolean(3, object.isActive());
-			ps.setInt(4, object.getParentId());
-			ps.setInt(5, object.getId());
+			ps.setString(3, object.getActive());
+			ps.setString(4, object.getParentId());
+			ps.setString(5, object.getId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#update(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -120,12 +122,13 @@ public class RegionDbHandle implements DbHandleAPI<Region> {
 			StringBuilder query = new StringBuilder("DELETE FROM region WHERE id=?");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setInt(1, object.getId());
+			ps.setString(1, object.getId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#delete(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -158,11 +161,11 @@ public class RegionDbHandle implements DbHandleAPI<Region> {
 			Region temp = null;
 			while (rs.next()) {
 				temp = new Region();
-				temp.setId(rs.getInt("id"));
+				temp.setId(rs.getString("id"));
 				temp.setName(rs.getString("name"));
 				temp.setCode(rs.getString("code"));
-				temp.setActive(rs.getBoolean("active"));
-				temp.setParentId(rs.getInt("parent_id"));
+				temp.setActive(rs.getString("active"));
+				temp.setParentId(rs.getString("parent_id"));
 				
 				list.add(temp);
 			}
@@ -171,6 +174,7 @@ public class RegionDbHandle implements DbHandleAPI<Region> {
 		} catch (Exception e) {
 			_LOG.error("#getAll(): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();

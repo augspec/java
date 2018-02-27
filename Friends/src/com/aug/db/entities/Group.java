@@ -5,16 +5,17 @@ import java.io.Serializable;
 public class Group implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private int rowid;
+	private String id;
 	private String name;
 	private String description;
-	private int userId;
+	private String userId;
 	
 	public Group() {
 		
 	}
 
-	public Group(int id, String name, String description, int userId) {
+	public Group(String id, String name, String description, String userId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -22,11 +23,19 @@ public class Group implements Serializable {
 		this.userId = userId;
 	}
 
-	public int getId() {
+	public int getRowid() {
+		return rowid;
+	}
+
+	public void setRowid(int rowid) {
+		this.rowid = rowid;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -46,11 +55,11 @@ public class Group implements Serializable {
 		this.description = description;
 	}
 	
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 	
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	

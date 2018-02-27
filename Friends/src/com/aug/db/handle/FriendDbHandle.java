@@ -57,6 +57,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 		} catch (Exception e) {
 			_LOG.error("#create(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -107,6 +108,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 		} catch (Exception e) {
 			_LOG.error("#update(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -143,6 +145,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 		} catch (Exception e) {
 			_LOG.error("#delete(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -196,6 +199,7 @@ public class FriendDbHandle implements DbHandleAPI<Friend> {
 		} catch (Exception e) {
 			_LOG.error("#getAll(): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();

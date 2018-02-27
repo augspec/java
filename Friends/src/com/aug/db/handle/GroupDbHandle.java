@@ -39,15 +39,16 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 			query.append("VALUES(?, ?, ?, ?)");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setInt(1, object.getId());
+			ps.setString(1, object.getId());
 			ps.setString(2, object.getName());
 			ps.setString(3, object.getDescription());
-			ps.setInt(4, object.getUserId());
+			ps.setString(4, object.getUserId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#create(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -81,13 +82,14 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 			ps = conn.prepareStatement(query.toString());
 			ps.setString(1, object.getName());
 			ps.setString(2, object.getDescription());
-			ps.setInt(3, object.getUserId());
-			ps.setInt(3, object.getId());
+			ps.setString(3, object.getUserId());
+			ps.setString(4, object.getId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#update(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -118,12 +120,13 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 			StringBuilder query = new StringBuilder("DELETE FROM `group` WHERE id=?");
 			
 			ps = conn.prepareStatement(query.toString());
-			ps.setInt(1, object.getId());
+			ps.setString(1, object.getId());
 			
 			return ps.executeUpdate() > 0;
 		} catch (Exception e) {
 			_LOG.error("#delete(?): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();
@@ -155,10 +158,10 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 			Group temp = null;
 			while (rs.next()) {
 				temp = new Group();
-				temp.setId(rs.getInt("id"));
+				temp.setId(rs.getString("id"));
 				temp.setName(rs.getString("name"));
 				temp.setDescription(rs.getString("description"));
-				temp.setUserId(rs.getInt("user_id"));
+				temp.setUserId(rs.getString("user_id"));
 				
 				list.add(temp);
 			}
@@ -167,6 +170,7 @@ public class GroupDbHandle implements DbHandleAPI<Group> {
 		} catch (Exception e) {
 			_LOG.error("#getAll(): " + e.getMessage(), e);
 		} finally {
+			DataSource.returnConnection(conn);
 			if (ps != null) {
 				try {
 					ps.close();

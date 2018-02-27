@@ -13,6 +13,7 @@
   	<link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap/css/jumbotron-narrow.css" type="text/css"/>
   	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/friend.css" type="text/css"/>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.9.1.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/js/friend.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/bootstrap/js/alert.js"></script>
   	<title><jsp:invoke fragment="title"/></title>
@@ -32,16 +33,26 @@
 		              <span class="icon-bar"></span>
 		              <span class="icon-bar"></span>
 		            </button>
-		            <a class="navbar-brand" href="#">Friend</a>
+		            <a class="navbar-brand" href="${pageContext.request.contextPath}/manage">Friend</a>
 		          </div>
 		          <div id="navbar" class="navbar-collapse collapse">
 		            <ul class="nav navbar-nav">
-		              <li class="<c:choose><c:when test="${sessionScope.tabActive eq 'friend' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="#">Friend</a></li>
+		              <li class="<c:choose><c:when test="${sessionScope.tabActive eq 'friend' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="${pageContext.request.contextPath}/manage">Friend</a></li>
 		              <li class="<c:choose><c:when test="${sessionScope.tabActive eq 'group' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="${pageContext.request.contextPath }/group">Group</a></li>
 		              <c:if test="${sessionScope.isAdmin eq true }">
 		              	<li class="<c:choose><c:when test="${sessionScope.tabActive eq 'user' }">active</c:when><c:otherwise></c:otherwise></c:choose>"><a href="${pageContext.request.contextPath }/user">User</a></li>
 		              </c:if>
 		            </ul>
+				    <div class="col-sm-3 col-md-4">
+				        <form method="get" class="navbar-form" role="search">
+					        <div class="input-group">
+					            <input type="text" class="form-control" placeholder="Search" name="q" value="${requestScope.q }">
+					            <div class="input-group-btn">
+					                <button class="btn btn-default" style="padding: 9px 12px;" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+					            </div>
+					        </div>
+				        </form>
+				    </div>
 		            <ul class="nav navbar-nav navbar-right">
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome <b>${sessionScope.user.username }</b> <span class="caret"></span></a>
@@ -69,5 +80,15 @@
 	      </footer>
 	    </div>
     </div>
+    <script type="text/javascript">
+		$(document).ready(function() {
+			$(window).on("load", function(e) {
+				var actions = location.pathname.split("/");
+				var action = actions[actions.length - 1];
+
+				$("form[role='search']").attr("action", action);
+			});
+		});
+    </script>
   </body>
 </html>
